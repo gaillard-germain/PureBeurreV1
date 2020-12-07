@@ -26,6 +26,7 @@ tables['Products'] = (
     "  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,"
     "  name varchar(100) NOT NULL UNIQUE,"
     "  brand varchar(100) NOT NULL,"
+    "  generic_name varchar(100) NOT NULL,"
     "  pnns_group_id smallint(5) unsigned NOT NULL,"
     "  ingredients text DEFAULT NULL,"
     "  additives text DEFAULT NULL,"

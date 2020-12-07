@@ -59,9 +59,9 @@ def connect():
 def insert_products(products):
     """ Insert multiple rows into a table """
 
-    query = 'INSERT IGNORE INTO Products(name, brand, pnns_group_id, ingredients, \
-             additives, allergens, labels, stores, link)' \
-             'VALUES(%s, %s, %s, %s, %s, %s, %s, %s, %s)'
+    query = 'INSERT IGNORE INTO Products(name, brand, generic_name, \
+             pnns_group_id, ingredients, additives, allergens, labels, \
+             stores, link) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 
     try:
         conx = connect()
@@ -78,3 +78,55 @@ def insert_products(products):
         cursor.close()
         conx.close()
         print('Connection closed.')
+
+def groups_menu():
+    query = 'SELECT * FROM PnnsGroups ORDER BY id'
+    menu = {}
+
+    try:
+        conx = connect()
+        cursor = conx.cursor()
+        cursor.execute(query)
+        rows = cursor.fetchall()
+
+        for row in rows:
+            menu[str(row[0])] = row[1]
+
+    except Error as error:
+        print(error)
+
+    finally:
+        cursor.close()
+        conx.close()
+        print('Connection closed.')
+    return menu
+
+def iter_row(cursor, size=10):
+    while True:
+        rows = cursor.fetchmany(size)
+        if not rows:
+            break
+        for row in rows:
+            yield row
+
+def products_menu(id):
+    query = "SELECT id, name FROM Products WHERE pnns_group_id = {} ORDER BY RAND() LIMIT 10".format(id)
+    menu = {}
+
+    try:
+        conx = connect()
+        cursor = conx.cursor()
+
+        cursor.execute(query)
+
+        for row in iter_row(cursor, 10):
+            menu[str(row[0])] = row[1]
+
+    except Error as error:
+        print(error)
+
+    finally:
+        cursor.close()
+        conx.close()
+        print('Connection closed.')
+    return menu
