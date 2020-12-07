@@ -6,7 +6,6 @@
 # Version: 0.1
 # License: GNU GPL
 
-# from __future__ import print_function
 
 import mysql.connector
 from mysql.connector import MySQLConnection, Error, errorcode
@@ -56,7 +55,9 @@ print('Connecting to MySQL...')
 cursor = conx.cursor()
 
 try:
-    cursor.execute("USE {}".format(db_name))
+    cursor.execute("DROP DATABASE {}".format(db_name))
+    create_database(cursor, db_name)
+    conx.database = db_name
 except Error as error:
     print("Database {} does not exists.".format(db_name))
     if error.errno == errorcode.ER_BAD_DB_ERROR:
@@ -74,7 +75,7 @@ for table_name in tables:
         cursor.execute(table_description)
     except Error as error:
         if error.errno == errorcode.ER_TABLE_EXISTS_ERROR:
-            print("already exists.")
+            print("{} already exists.".format(table_name))
         else:
             print(error.msg)
     else:
@@ -83,7 +84,7 @@ for table_name in tables:
 try:
     print("Filling table PnnsGroups: ")
     cursor.execute(query)
-
+    print("OK")
     conx.commit()
 
 except Error as error:

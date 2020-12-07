@@ -11,6 +11,8 @@ from dbtools import insert_products
 
 
 def check_entry(dict, key):
+    """ Checks if the field exist in the json from openfoodfacts API """
+
     try:
         if not dict[key]:
             return 'NULL'
@@ -21,6 +23,8 @@ def check_entry(dict, key):
         return 'NULL'
 
 def feed_db():
+    """ Insert datas from openfoodfacts API into database """
+
     print('Querying datas...')
     search = 'https://fr.openfoodfacts.org/cgi/search.pl?search_terms=&\
     tagtype_0=states&tag_contains_0=contains&tag_0=complete&\
