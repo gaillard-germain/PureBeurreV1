@@ -6,7 +6,8 @@ DROP TABLE IF EXISTS PnnsGroups;
 CREATE TABLE Products(
   id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   name varchar(100) NOT NULL UNIQUE,
-  brand varchar(100) NOT NULL,
+  brand varchar(100) DEFAULT NULL,
+  categories text DEFAULT NULL,
   pnns_group_id smallint(5) unsigned NOT NULL,
   ingredients text DEFAULT NULL,
   additives text DEFAULT NULL,

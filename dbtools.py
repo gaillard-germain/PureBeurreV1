@@ -6,6 +6,7 @@
 # Version: 0.1
 # License: GNU GPL
 
+
 from mysql.connector import MySQLConnection, Error
 from configparser import ConfigParser
 
@@ -32,7 +33,7 @@ def read_db_config(filename='config.ini', section='mysql'):
         for item in items:
             db[item[0]] = item[1]
     else:
-        raise Exception('{0} not found in the {1} file'.format(section, filename))
+        raise Exception('{} not found in {} file'.format(section, filename))
     return db
 
 def connect():
@@ -41,7 +42,7 @@ def connect():
     db_config = read_db_config()
     conx = None
     try:
-        print('Connecting to MySQL {} database...'.format(db_config['database']))
+        print('Connecting to {} database...'.format(db_config['database']))
         conx = MySQLConnection(**db_config)
 
         if conx.is_connected():
@@ -59,7 +60,7 @@ def connect():
 def insert_products(products):
     """ Insert multiple rows into a table """
 
-    query = 'INSERT IGNORE INTO Products(name, brand, generic_name, \
+    query = 'INSERT IGNORE INTO Products(name, brand, categories, \
              pnns_group_id, ingredients, additives, allergens, labels, \
              stores, link) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 
@@ -110,7 +111,7 @@ def iter_row(cursor, size=10):
             yield row
 
 def products_menu(id):
-    query = "SELECT id, name FROM Products WHERE pnns_group_id = {} \
+    query = "SELECT id, name, brand FROM Products WHERE pnns_group_id = {} \
              AND (additives IS NOT NULL AND labels IS NULL) ORDER BY RAND() \
              LIMIT 10".format(id)
     menu = {}
@@ -122,7 +123,7 @@ def products_menu(id):
         cursor.execute(query)
 
         for row in iter_row(cursor, 10):
-            menu[str(row[0])] = row[1]
+            menu[str(row[0])] = '{} / {}'.format(row[1], row[2])
 
     except Error as error:
         print(error)
@@ -132,3 +133,33 @@ def products_menu(id):
         conx.close()
         print('Connection closed.')
     return menu
+
+def product_details(id):
+    query = "SELECT * FROM Products WHERE id = {}".format(id)
+    product = {}
+
+    try:
+        conx = connect()
+        cursor = conx.cursor()
+        cursor.execute(query)
+        row = cursor.fetchone()
+        product['Nom'] = row[1]
+        product['Marque'] = row[2]
+        product['Catégories'] = row[3]
+        product['Ingrédients'] = row[5]
+        product['Additifs'] = row[6]
+        product['Allergènes'] = row[7]
+        product['Labels'] = row[8]
+        product['Distribué par'] = row[9]
+        product['Lien OpenFoodFacts'] = row[10]
+
+
+    except Error as error:
+        print(error)
+
+    finally:
+        cursor.close()
+        conx.close()
+        print('Connection closed.')
+
+    return product

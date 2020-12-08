@@ -6,6 +6,7 @@
 # Version: 0.1
 # License: GNU GPL
 
+
 import requests, json
 from dbtools import insert_products
 
@@ -36,7 +37,7 @@ def format_value(dict, key):
             else:
                 entry = None
         elif isinstance(entry, list):
-            entry = ', '.join(entry)
+            entry = ', '.join(entry).replace('en:','')
 
     except KeyError as error:
         print("product {} doesn't have {} field".format(dict['code'], error))
@@ -59,7 +60,7 @@ def feed_db():
     for product in all:
         raw = (format_value(product, 'product_name'),
                format_value(product, 'brands'),
-               format_value(product, 'generic_name_fr'),
+               format_value(product, 'categories'),
                format_value(product, 'pnns_groups_1'),
                format_value(product, 'ingredients_text_fr'),
                format_value(product, 'additives_tags'),

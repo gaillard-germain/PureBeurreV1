@@ -26,7 +26,7 @@ tables['Products'] = (
     "  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,"
     "  name varchar(100) NOT NULL UNIQUE,"
     "  brand varchar(100) DEFAULT NULL,"
-    "  generic_name varchar(100) DEFAULT NULL,"
+    "  categories text DEFAULT NULL,"
     "  pnns_group_id smallint(5) unsigned NOT NULL,"
     "  ingredients text DEFAULT NULL,"
     "  additives text DEFAULT NULL,"
@@ -44,8 +44,9 @@ tables['Products'] = (
 
 query = (
     "INSERT INTO PnnsGroups VALUES (1, 'Lait et produits laitiers'),"
-    "(2, 'Viandes Poissons Oeufs'), (3, 'Féculents'), (4, 'Fruits et légumes'),"
-    "(5, 'Corps gras'), (6, 'Sucre et produits sucrés'), (7, 'Boissons'),"
+    "(2, 'Viandes Poissons Oeufs'), (3, 'Féculents'),"
+    "(4, 'Fruits et légumes'), (5, 'Corps gras'),"
+    "(6, 'Sucre et produits sucrés'), (7, 'Boissons'),"
     "(8, 'Produits salés'), (9, 'Plats préparés'), (10, 'Autre');")
 
 db_config = read_db_config()
