@@ -110,7 +110,9 @@ def iter_row(cursor, size=10):
             yield row
 
 def products_menu(id):
-    query = "SELECT id, name FROM Products WHERE pnns_group_id = {} ORDER BY RAND() LIMIT 10".format(id)
+    query = "SELECT id, name FROM Products WHERE pnns_group_id = {} \
+             AND (additives IS NOT NULL AND labels IS NULL) ORDER BY RAND() \
+             LIMIT 10".format(id)
     menu = {}
 
     try:

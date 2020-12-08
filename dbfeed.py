@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+#  *  coding: utf 8  *
 
 # dbfeed.py
 # Author: Germain GAILLARD <gaillard.germain@gmail.com>
@@ -10,21 +10,38 @@ import requests, json
 from dbtools import insert_products
 
 
-def check_entry(dict, key):
-    """ Checks if the field exist in the json from openfoodfacts API """
+def format_value(dict, key):
+    """ Checks if the field exist in the json from openfoodfacts API
+        and return a formated value"""
+
+    groups = {'Milk and dairy products' : 1,
+            'Fish Meat Eggs' : 2,
+            'Cereals and potatoes' : 3,
+            'Fruits and vegetables' : 4,
+            'Fat and sauces' : 5,
+            'Sugary snacks' : 6,
+            'Beverages' : 7,
+            'Salty snacks' : 8,
+            'Composite foods' : 9,
+            'unknown' : 10,}
+    entry = None
 
     try:
-        if not dict[key]:
-            return 'NULL'
-        else:
-            return dict[key]
+        entry = dict[key]
+        if not entry:
+            entry = None
+        elif key == 'pnns_groups_1':
+            if entry in groups:
+                entry = groups[entry]
+            else:
+                entry = None
+        elif isinstance(entry, list):
+            entry = ', '.join(entry)
+
     except KeyError as error:
         print("product {} doesn't have {} field".format(dict['code'], error))
-        return 'NULL'
 
-def join_tags(tags):
-    if tags != 'NULL':
-        return ', '.join(tags)
+    return entry
 
 def feed_db():
     """ Insert datas from openfoodfacts API into database """
@@ -39,29 +56,17 @@ def feed_db():
 
     products = []
 
-    pnns = {'milk-and-dairy-products' : 1,
-            'fish-meat-eggs' : 2,
-            'cereals-and-potatoes' : 3,
-            'fruits-and-vegetables' : 4,
-            'fat-and-sauces' : 5,
-            'sugary-snacks' : 6,
-            'beverages' : 7,
-            'salty-snacks' : 8,
-            'composite-foods' : 9,
-            'unknown' : 10,
-            'null' : 10}
-
     for product in all:
-        raw = (check_entry(product, 'product_name'),
-                check_entry(product, 'brands'),
-                check_entry(product, 'generic_name_fr'),
-                pnns[check_entry(product, 'pnns_groups_1').replace(' ', '-').lower()],
-                check_entry(product, 'ingredients_text_fr'),
-                join_tags(check_entry(product, 'additives_tags')),
-                join_tags(check_entry(product, 'allergens_tags')),
-                check_entry(product, 'labels'),
-                check_entry(product, 'stores'),
-                check_entry(product, 'url'))
+        raw = (format_value(product, 'product_name'),
+               format_value(product, 'brands'),
+               format_value(product, 'generic_name_fr'),
+               format_value(product, 'pnns_groups_1'),
+               format_value(product, 'ingredients_text_fr'),
+               format_value(product, 'additives_tags'),
+               format_value(product, 'allergens_tags'),
+               format_value(product, 'labels'),
+               format_value(product, 'stores'),
+               format_value(product, 'url'))
 
         products.append(raw)
 
