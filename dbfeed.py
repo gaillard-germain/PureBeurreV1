@@ -37,7 +37,7 @@ def format_value(dict, key):
             else:
                 entry = None
         elif isinstance(entry, list):
-            entry = ', '.join(entry).replace('en:','')
+            entry = ', '.join(entry)
 
     except KeyError as error:
         print("product {} doesn't have {} field".format(dict['code'], error))
@@ -60,14 +60,15 @@ def feed_db():
     for product in all:
         raw = (format_value(product, 'product_name'),
                format_value(product, 'brands'),
-               format_value(product, 'categories'),
+               format_value(product, 'categories_tags'),
                format_value(product, 'pnns_groups_1'),
                format_value(product, 'ingredients_text_fr'),
                format_value(product, 'additives_tags'),
                format_value(product, 'allergens_tags'),
                format_value(product, 'labels'),
                format_value(product, 'stores'),
-               format_value(product, 'url'))
+               format_value(product, 'url'),
+               format_value(product, 'compared_to_category'))
 
         products.append(raw)
 

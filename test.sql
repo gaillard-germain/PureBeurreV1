@@ -7,7 +7,7 @@ CREATE TABLE Products(
   id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
   name varchar(100) NOT NULL UNIQUE,
   brand varchar(100) DEFAULT NULL,
-  categories text DEFAULT NULL,
+  tags text NOT NULL,
   pnns_group_id smallint(5) unsigned NOT NULL,
   ingredients text DEFAULT NULL,
   additives text DEFAULT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE Products(
   labels text DEFAULT NULL,
   stores text DEFAULT NULL,
   link varchar(100) DEFAULT NULL UNIQUE,
-  substitut_id smallint(5) unsigned DEFAULT NULL,
+  compared_to varchar(50) NOT NULL,
   PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 
@@ -28,9 +28,8 @@ CREATE TABLE PnnsGroups(
 LOCK TABLES PnnsGroups WRITE;
 INSERT INTO PnnsGroups VALUES (1, 'Lait et produits laitiers'),
 (2, 'Viandes Poissons Oeufs'), (3, 'Féculents'), (4, 'Fruits et légumes'),
-(5, 'Corps gras'), (6, 'Sucre et produits sucrés'), (7, 'Boissons'),
+(5, 'Corps gras'), (6, 'Produits sucrés'), (7, 'Boissons'),
 (8, 'Produits salés'), (9, 'Plats préparés'), (10, 'Autre');
 UNLOCK TABLES;
 
-ALTER TABLE Products ADD CONSTRAINT fk_substitut_id FOREIGN KEY (substitut_id) REFERENCES Products(id);
 ALTER TABLE Products ADD CONSTRAINT fk_pnns_group_id FOREIGN KEY (pnns_group_id) REFERENCES PnnsGroups(id);

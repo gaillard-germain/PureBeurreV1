@@ -12,6 +12,8 @@ from configparser import ConfigParser
 
 
 def create_database(cursor, db_name):
+    """ Create database """
+
     try:
         cursor.execute(
             "CREATE DATABASE {} DEFAULT CHARACTER SET 'utf8'".format(db_name))
@@ -22,11 +24,9 @@ def create_database(cursor, db_name):
 def read_db_config(filename='config.ini', section='mysql'):
     """ Read database configuration file and return a dictionary object"""
 
-    # create parser and read ini configuration file
     parser = ConfigParser()
     parser.read(filename)
 
-    # get section, default to mysql
     db = {}
     if parser.has_section(section):
         items = parser.items(section)
@@ -60,10 +60,10 @@ def connect():
 def insert_products(products):
     """ Insert multiple rows into a table """
 
-    query = 'INSERT IGNORE INTO Products(name, brand, categories, \
+    query = 'INSERT IGNORE INTO Products(name, brand, tags, \
              pnns_group_id, ingredients, additives, allergens, labels, \
-             stores, link) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-
+             stores, link, compared_to) \
+             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
     try:
         conx = connect()
 
@@ -134,8 +134,30 @@ def products_menu(id):
         print('Connection closed.')
     return menu
 
-def product_details(id):
-    query = "SELECT * FROM Products WHERE id = {}".format(id)
+def keyword(id):
+    query = "SELECT compared_to FROM Products WHERE id = {}".format(id)
+    word = None
+
+    try:
+        conx = connect()
+        cursor = conx.cursor()
+        cursor.execute(query)
+        row = cursor.fetchone()
+
+        word = row[0]
+    except Error as error:
+        print(error)
+
+    finally:
+        cursor.close()
+        conx.close()
+        print('Connection closed.')
+    return word
+
+def product_details(keyword):
+    query = "SELECT * FROM Products WHERE tags LIKE ('%{}%') \
+             AND (additives IS NULL AND labels IS NOT NULL) ORDER BY RAND() \
+             LIMIT 1".format(keyword)
     product = {}
 
     try:
@@ -143,16 +165,18 @@ def product_details(id):
         cursor = conx.cursor()
         cursor.execute(query)
         row = cursor.fetchone()
-        product['Nom'] = row[1]
-        product['Marque'] = row[2]
-        product['Catégories'] = row[3]
-        product['Ingrédients'] = row[5]
-        product['Additifs'] = row[6]
-        product['Allergènes'] = row[7]
-        product['Labels'] = row[8]
-        product['Distribué par'] = row[9]
-        product['Lien OpenFoodFacts'] = row[10]
 
+        if row:
+            product['Nom'] = row[1]
+            product['Marque'] = row[2]
+            product['Ingrédients'] = row[5]
+            product['Additifs'] = row[6]
+            product['Allergènes'] = row[7]
+            product['Labels'] = row[8]
+            product['Distribué par'] = row[9]
+            product['Lien OpenFoodFacts'] = row[10]
+        else:
+            product['résultat'] = 'Aucun substitut trouvé'
 
     except Error as error:
         print(error)

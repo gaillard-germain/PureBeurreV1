@@ -7,11 +7,11 @@
 # License: GNU GPL
 
 import sys
-from dbtools import groups_menu, products_menu, product_details
+from dbtools import groups_menu, products_menu, keyword, product_details
 
 
 def show_product(**product):
-    print('\n---DETAIL---\n|')
+    print('\n---Substitut---\n|')
     for key, value in product.items():
         if value and ', ' in value:
             new = value.replace(', ', '\n|\t  -')
@@ -56,7 +56,7 @@ def main():
         menu = products_menu(com)
         com = menu_input(menu, title)
 
-        product = product_details(com)
+        product = product_details(keyword(com))
         show_product(**product)
 
     elif com == '2':
