@@ -8,7 +8,7 @@
 
 
 import requests, json
-from dbtools import insert_products
+from busboy import Busboy
 
 
 def format_value(dict, key):
@@ -25,26 +25,26 @@ def format_value(dict, key):
             'Salty snacks' : 8,
             'Composite foods' : 9,
             'unknown' : 10,}
-    entry = None
+    value = None
 
     try:
-        entry = dict[key]
-        if not entry:
-            entry = None
+        value = dict[key]
+        if not value:
+            value = None
         elif key == 'pnns_groups_1':
-            if entry in groups:
-                entry = groups[entry]
+            if value in groups:
+                value = groups[value]
             else:
-                entry = None
-        elif isinstance(entry, list):
-            entry = ', '.join(entry)
+                value = None
+        elif isinstance(value, list):
+            value = ', '.join(value)
 
     except KeyError as error:
         print("product {} doesn't have {} field".format(dict['code'], error))
 
-    return entry
+    return value
 
-def feed_db():
+def feed_database():
     """ Insert datas from openfoodfacts API into database """
 
     print('Querying datas...')
@@ -72,4 +72,6 @@ def feed_db():
 
         products.append(raw)
 
-    insert_products(products)
+    busboy = Busboy()
+    busboy.insert_products(products)
+    busboy.dismiss()

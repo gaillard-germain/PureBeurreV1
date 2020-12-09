@@ -7,7 +7,7 @@
 # License: GNU GPL
 
 import sys
-from dbtools import groups_menu, products_menu, keyword, product_details
+from busboy import Busboy
 
 
 def show_product(**product):
@@ -42,6 +42,7 @@ def menu_input(menu, title):
 def main():
     """ Main function """
 
+    busboy = Busboy()
     title = ''
     menu = {'1' : "Quels aliment souhaitez vous remplacer ?",
             '2' : "Retrouver mes aliments substitués."}
@@ -49,15 +50,17 @@ def main():
 
     if com == '1':
         title = "---Choisissez une catégorie.---"
-        menu = groups_menu()
+        menu = busboy.groups_menu()
         com = menu_input(menu, title)
 
         title ="---Choisissez un produit.---"
-        menu = products_menu(com)
+        menu = busboy.products_menu(com)
         com = menu_input(menu, title)
 
-        product = product_details(keyword(com))
+        product = busboy.product_details(busboy.keyword(com))
         show_product(**product)
+
+        busboy.dismiss()
 
     elif com == '2':
         pass
