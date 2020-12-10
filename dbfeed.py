@@ -8,7 +8,7 @@
 
 
 import requests, json
-from busboy import Busboy
+from dbtools import insert_products
 
 
 def format_value(dict, key):
@@ -72,6 +72,4 @@ def feed_database():
 
         products.append(row)
 
-    busboy = Busboy()
-    busboy.insert_products(products)
-    busboy.dismiss()
+    insert_products(products)

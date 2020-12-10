@@ -25,6 +25,13 @@ CREATE TABLE PnnsGroups(
   PRIMARY KEY (id)
 ) ENGINE = InnoDB;
 
+CREATE TABLE Substituts (
+  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,
+  unliked_id smallint(5) unsigned NOT NULL,
+  liked_id smallint(5) unsigned NOT NULL,
+  PRIMARY KEY (id)
+) ENGINE = InnoDB;
+
 LOCK TABLES PnnsGroups WRITE;
 INSERT INTO PnnsGroups VALUES (1, 'Lait et produits laitiers'),
 (2, 'Viandes Poissons Oeufs'), (3, 'Féculents'), (4, 'Fruits et légumes'),
@@ -33,3 +40,5 @@ INSERT INTO PnnsGroups VALUES (1, 'Lait et produits laitiers'),
 UNLOCK TABLES;
 
 ALTER TABLE Products ADD CONSTRAINT fk_pnns_group_id FOREIGN KEY (pnns_group_id) REFERENCES PnnsGroups(id);
+ALTER TABLE Substituts ADD CONSTRAINT fk_unliked_id FOREIGN KEY (unliked_id) REFERENCES Products (id);
+ALTER TABLE Substituts ADD CONSTRAINT fk_liked_id FOREIGN KEY (liked_id) REFERENCES Products (id);

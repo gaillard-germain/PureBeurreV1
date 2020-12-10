@@ -8,7 +8,7 @@
 
 
 from mysql.connector import MySQLConnection, Error, errorcode
-from dbconfig import read_db_config
+from dbtools import read_db_config
 
 
 class Busboy:
@@ -42,21 +42,6 @@ class Busboy:
         self.cursor.close()
         self.conx.close()
         print('Connection closed.')
-
-    def insert_products(self, products):
-        """ Insert multiple rows into a table """
-
-        query = 'INSERT IGNORE INTO Products(name, brand, tags, \
-                 pnns_group_id, ingredients, additives, allergens, labels, \
-                 stores, link, compared_to) \
-                 VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
-        try:
-            print('Inserting datas...')
-            self.cursor.executemany(query, products)
-            self.conx.commit()
-
-        except Error as error:
-            print(error)
 
     def groups_menu(self):
         query = 'SELECT * FROM PnnsGroups ORDER BY id'

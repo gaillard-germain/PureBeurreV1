@@ -7,7 +7,7 @@
 # License: GNU GPL
 
 from mysql.connector import MySQLConnection, Error, errorcode
-from dbconfig import read_db_config
+from dbtools import read_db_config
 from dbfeed import feed_database
 from tables import tables, query
 
