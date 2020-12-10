@@ -58,7 +58,7 @@ def feed_database():
     products = []
 
     for product in all:
-        raw = (format_value(product, 'product_name'),
+        row = (format_value(product, 'product_name'),
                format_value(product, 'brands'),
                format_value(product, 'categories_tags'),
                format_value(product, 'pnns_groups_1'),
@@ -70,7 +70,7 @@ def feed_database():
                format_value(product, 'url'),
                format_value(product, 'compared_to_category'))
 
-        products.append(raw)
+        products.append(row)
 
     busboy = Busboy()
     busboy.insert_products(products)

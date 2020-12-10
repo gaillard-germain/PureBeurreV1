@@ -7,7 +7,7 @@
 # License: GNU GPL
 
 
-from mysql.connector import MySQLConnection, Error
+from mysql.connector import MySQLConnection, Error, errorcode
 from dbconfig import read_db_config
 
 
@@ -106,10 +106,26 @@ class Busboy:
 
         return keyword
 
-    def product_details(self, keyword):
-        query = "SELECT * FROM Products WHERE tags LIKE ('%{}%') \
+    def substitut_id(self, id):
+        keyword = self.keyword(id)
+        query = "SELECT id FROM Products WHERE tags LIKE ('%{}%') \
                  AND (additives IS NULL AND labels IS NOT NULL) ORDER BY RAND() \
                  LIMIT 1".format(keyword)
+        id = None
+
+        try:
+            self.cursor.execute(query)
+            row = self.cursor.fetchone()
+            if row:
+                id = row[0]
+
+        except Error as error:
+            print(error)
+
+        return id
+
+    def product_detail(self, id):
+        query = "SELECT * FROM Products WHERE id = {}".format(id)
         product = {}
 
         try:
@@ -125,10 +141,42 @@ class Busboy:
                 product['Labels'] = row[8]
                 product['Distribué par'] = row[9]
                 product['Lien OpenFoodFacts'] = row[10]
+
+        except Error as error:
+            if error.errno == errorcode.ER_BAD_FIELD_ERROR:
+                print("\nAucun produits correspondant\n")
             else:
-                product['résultat'] = 'Aucun substitut trouvé'
+                print(error)
+
+        return product
+
+    def save(self, ids):
+        query = "INSERT INTO Substituts(unliked_id, liked_id) \
+                 VALUES(%s, %s)"
+
+        try:
+            self.cursor.execute(query, ids)
+            self.conx.commit()
 
         except Error as error:
             print(error)
 
-        return product
+    def substituts_saved(self):
+        query = "SELECT Prod1.name AS unliked, Prod2.name AS liked \
+                 FROM Substituts INNER JOIN Products AS Prod1 \
+                 ON Substituts.unliked_id = Prod1.id \
+                 INNER JOIN Products AS Prod2 \
+                 ON Substituts.liked_id = Prod2.id;"
+        sub_saved = {}
+
+        try:
+            self.cursor.execute(query)
+            rows = self.cursor.fetchall()
+
+            for row in rows:
+                sub_saved[row[0]] = row[1]
+
+        except Error as error:
+            print(error)
+
+        return sub_saved

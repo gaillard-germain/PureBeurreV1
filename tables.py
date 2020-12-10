@@ -29,8 +29,20 @@ tables['Products'] = (
     "  link varchar(100) DEFAULT NULL UNIQUE,"
     "  compared_to varchar(50) NOT NULL,"
     "  PRIMARY KEY (id),"
-    "  CONSTRAINT fk_pnns_group_id FOREIGN KEY (pnns_group_id) "
+    "  CONSTRAINT fk_pnns_group_id FOREIGN KEY (pnns_group_id)"
     "    REFERENCES PnnsGroups (id)"
+    ") ENGINE = InnoDB")
+
+tables['Substituts'] = (
+    "CREATE TABLE Substituts ("
+    "  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,"
+    "  unliked_id smallint(5) unsigned NOT NULL,"
+    "  liked_id smallint(5) unsigned NOT NULL,"
+    "  PRIMARY KEY (id),"
+    "  CONSTRAINT fk_unliked_id FOREIGN KEY (unliked_id)"
+    "    REFERENCES Products (id),"
+    "  CONSTRAINT fk_liked_id FOREIGN KEY (liked_id)"
+    "    REFERENCES Products (id)"
     ") ENGINE = InnoDB")
 
 query = (

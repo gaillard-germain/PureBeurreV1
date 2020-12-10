@@ -9,61 +9,87 @@
 import sys
 from busboy import Busboy
 
+class Ui:
+    def __init__(self):
+        self.title = None
+        self.menu = None
 
-def show_product(**product):
-    print('\n---Substitut---\n|')
-    for key, value in product.items():
-        if value and ', ' in value:
-            new = value.replace(', ', '\n|\t  -')
-            print("|\t{} :\n|\t  -{}".format(key, new))
+    def show_saved(self, **substituts):
+        for key, value in substituts.items():
+            print("\t- '{}' Peu être remplacé par '{}'".format(key, value))
+
+    def show_product(self, **product):
+        print('\n---Substitut---\n|')
+        for key, value in product.items():
+            if value and ', ' in value:
+                new = value.replace(', ', '\n|\t  -')
+                print("|\t{} :\n|\t  -{}".format(key, new))
+            else:
+                print("|\t{} : {}".format(key, value))
+        print('|\n------------\n')
+
+    def menu_input(self):
+        """ Display menu with user's entry """
+
+        print('\n{}'.format(self.title))
+        if not self.menu:
+            print("\nAucun aliments dans cette catégorie.\n")
+
+        for key, value in self.menu.items():
+            print("{} - {}".format(key, value))
+
+        com = input("\nEntrez le n° de votre choix : ")
+
+        if com in self.menu and com.isdigit():
+            return int(com)
         else:
-            print("|\t{} : {}".format(key, value))
-    print('|\n------------\n')
+            print("\n!!! Choix invalide !!!\n")
+            return self.menu_input()
 
-def menu_input(menu, title):
-    """ Display menu with user's entry """
+    def main(self):
+        """ Main function """
 
-    menu['0'] = 'Quitter'
-    print('\n{}'.format(title))
-    for key, value in menu.items():
-        print("{} - {}".format(key, value))
+        busboy = Busboy()
 
-    com = input("\nEntrez le n° de votre choix : ")
+        while True:
+            self.title = "Bienvenu sur l'application Pure Beurre"
+            self.menu = {'1' : "Quels aliment souhaitez vous remplacer ?",
+                         '2' : "Retrouver mes aliments substitués.",
+                         '0' : "Quitter."}
+            com = self.menu_input()
 
-    if com in menu and com.isdigit():
-        if not int(com):
-            sys.exit()
-        else:
-            return com
-    else:
-        print("\n!!! Choix invalide !!!\n")
-        return menu_input(menu, title)
+            if not com:
+                break
 
-def main():
-    """ Main function """
+            if com == 1:
+                self.title = "---Choisissez une catégorie.---"
+                self.menu = busboy.groups_menu()
+                com = self.menu_input()
 
-    busboy = Busboy()
-    title = ''
-    menu = {'1' : "Quels aliment souhaitez vous remplacer ?",
-            '2' : "Retrouver mes aliments substitués."}
-    com = menu_input(menu, title)
+                self.title ="---Choisissez un produit.---"
+                self.menu = busboy.products_menu(com)
+                com = self.menu_input()
 
-    if com == '1':
-        title = "---Choisissez une catégorie.---"
-        menu = busboy.groups_menu()
-        com = menu_input(menu, title)
+                product_id = com
+                substitut_id = busboy.substitut_id(product_id)
+                substitut = busboy.product_detail(substitut_id)
+                self.show_product(**substitut)
 
-        title ="---Choisissez un produit.---"
-        menu = busboy.products_menu(com)
-        com = menu_input(menu, title)
+                self.title = "Souhaitez-vous sauvegarder le résultat ?"
+                self.menu = {'1' : "Oui", '2' : "Non"}
+                com = self.menu_input()
 
-        product = busboy.product_details(busboy.keyword(com))
-        show_product(**product)
+                if com == 1:
+                    busboy.save((product_id, substitut_id))
+                    com = None
+                elif com == 2:
+                    com = None
+
+            elif com == 2:
+                substituts = busboy.substituts_saved()
+                self.show_saved(**substituts)
 
         busboy.dismiss()
 
-    elif com == '2':
-        pass
-
 if __name__ == '__main__':
-    main()
+    Ui().main()
