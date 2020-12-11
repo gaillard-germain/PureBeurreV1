@@ -65,6 +65,7 @@ def feed_database():
                format_value(product, 'ingredients_text_fr'),
                format_value(product, 'additives_tags'),
                format_value(product, 'allergens_tags'),
+               format_value(product, 'nutrition_grade_fr'),
                format_value(product, 'labels'),
                format_value(product, 'stores'),
                format_value(product, 'url'),

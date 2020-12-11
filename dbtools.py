@@ -30,9 +30,9 @@ def insert_products(products):
     """ Insert products rows into Products table """
 
     query = 'INSERT IGNORE INTO Products(name, brand, tags, \
-             pnns_group_id, ingredients, additives, allergens, labels, \
-             stores, link, compared_to) \
-             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+             pnns_group_id, ingredients, additives, allergens, nutriscore, \
+             labels, stores, link, compared_to) \
+             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 
     db_config = read_db_config()
 

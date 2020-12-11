@@ -67,9 +67,11 @@ class Busboy:
     def products_menu(self, id):
         """ Returns a dict of a random top ten 'bads' products with their id """
 
-        query = "SELECT id, name, brand FROM Products WHERE pnns_group_id = {} \
-                 AND (additives IS NOT NULL AND labels IS NULL) ORDER BY RAND() \
-                 LIMIT 10".format(id)
+        query = "SELECT id, name, brand \
+                 FROM Products WHERE pnns_group_id = {} \
+                 AND (nutriscore IN ('d', 'e') \
+                 OR nutriscore IS NULL) \
+                 ORDER BY RAND() LIMIT 10".format(id)
         menu = {}
 
         try:
@@ -105,8 +107,8 @@ class Busboy:
 
         keyword = self.keyword(id)
         query = "SELECT id FROM Products WHERE tags LIKE ('%{}%') \
-                 AND (additives IS NULL AND labels IS NOT NULL) ORDER BY RAND() \
-                 LIMIT 1".format(keyword)
+                 AND (nutriscore IN ('a', 'b', 'c') OR additives IS NULL) \
+                 ORDER BY RAND() LIMIT 1".format(keyword)
         id = None
 
         try:
@@ -136,9 +138,10 @@ class Busboy:
                 product['Ingrédients'] = row[5]
                 product['Additifs'] = row[6]
                 product['Allergènes'] = row[7]
-                product['Labels'] = row[8]
-                product['Distribué par'] = row[9]
-                product['Lien OpenFoodFacts'] = row[10]
+                product['Nutriscore'] = row[8]
+                product['Labels'] = row[9]
+                product['Distribué par'] = row[10]
+                product['Lien OpenFoodFacts'] = row[11]
 
         except Error as error:
             if error.errno == errorcode.ER_BAD_FIELD_ERROR:

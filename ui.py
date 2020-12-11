@@ -31,8 +31,7 @@ class Ui:
 
         print("\n---Mes aliments substitués.---\n")
         if unliked and liked:
-            for i in range(len(unliked)):
-                k1 = list(unliked)[i]
+            for i, k1 in enumerate(unliked.keys()):
                 v1 = unliked[k1]
                 k2 = list(liked)[i]
                 v2 = liked[k2]
