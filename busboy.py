@@ -9,6 +9,7 @@
 
 from mysql.connector import MySQLConnection, Error, errorcode
 from dbtools import read_db_config
+from collections import OrderedDict
 
 
 class Busboy:
@@ -39,13 +40,17 @@ class Busboy:
                 self.cursor = self.conx.cursor()
 
     def dismiss(self):
+        """ Close connexion to MySQL database """
+
         self.cursor.close()
         self.conx.close()
         print('Connection closed.')
 
     def groups_menu(self):
+        """ Returns a dict of alimentary groups with their id """
+
         query = 'SELECT * FROM PnnsGroups ORDER BY id'
-        menu = {}
+        menu = OrderedDict()
 
         try:
             self.cursor.execute(query)
@@ -60,6 +65,8 @@ class Busboy:
         return menu
 
     def products_menu(self, id):
+        """ Returns a dict of a random top ten 'bads' products with their id """
+
         query = "SELECT id, name, brand FROM Products WHERE pnns_group_id = {} \
                  AND (additives IS NOT NULL AND labels IS NULL) ORDER BY RAND() \
                  LIMIT 10".format(id)
@@ -70,7 +77,7 @@ class Busboy:
             rows = self.cursor.fetchall()
 
             for row in rows:
-                menu[str(row[0])] = '{} / {}'.format(row[1], row[2])
+                menu[str(row[0])] = '{} de {}'.format(row[1], row[2])
 
         except Error as error:
             print(error)
@@ -78,6 +85,8 @@ class Busboy:
         return menu
 
     def keyword(self, id):
+        """ Returns the keyword of the product """
+
         query = "SELECT compared_to FROM Products WHERE id = {}".format(id)
         keyword = None
 
@@ -92,6 +101,8 @@ class Busboy:
         return keyword
 
     def substitut_id(self, id):
+        """ Returns a random 'good' product's id which tags matched keyword """
+
         keyword = self.keyword(id)
         query = "SELECT id FROM Products WHERE tags LIKE ('%{}%') \
                  AND (additives IS NULL AND labels IS NOT NULL) ORDER BY RAND() \
@@ -110,6 +121,8 @@ class Busboy:
         return id
 
     def product_detail(self, id):
+        """ Returns a dict {field : value} of the product """
+
         query = "SELECT * FROM Products WHERE id = {}".format(id)
         product = {}
 
@@ -136,6 +149,8 @@ class Busboy:
         return product
 
     def save(self, ids):
+        """ Saves comparison in database (product's id) """
+
         query = "INSERT INTO Substituts(unliked_id, liked_id) \
                  VALUES(%s, %s)"
 
@@ -147,21 +162,26 @@ class Busboy:
             print(error)
 
     def substituts_saved(self):
-        query = "SELECT Prod1.name AS unliked, Prod2.name AS liked \
+        """ Returns a dict of unliked products and a dict of liked products """
+
+        query = "SELECT unliked_id, Prod1.name, Prod1.brand,\
+                 liked_id, Prod2.name, Prod2.brand \
                  FROM Substituts INNER JOIN Products AS Prod1 \
                  ON Substituts.unliked_id = Prod1.id \
                  INNER JOIN Products AS Prod2 \
-                 ON Substituts.liked_id = Prod2.id;"
-        sub_saved = {}
+                 ON Substituts.liked_id = Prod2.id"
+        unliked = OrderedDict()
+        liked = OrderedDict()
 
         try:
             self.cursor.execute(query)
             rows = self.cursor.fetchall()
 
             for row in rows:
-                sub_saved[row[0]] = row[1]
+                unliked[str(row[0])] = "{} de {}".format(row[1], row[2])
+                liked[str(row[3])] = "{} de {}".format(row[4], row[5])
 
         except Error as error:
             print(error)
 
-        return sub_saved
+        return unliked, liked
