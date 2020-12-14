@@ -35,7 +35,9 @@ class Ui:
                 v1 = unliked[k1]
                 k2 = list(liked)[i]
                 v2 = liked[k2]
-                print("({}) {} --substitut-> ({}) {}".format(k1.ljust(4), v1.ljust(30), k2, v2))
+                print("({}) {} --substitut-> ({}) {}".format(k1.ljust(4),
+                                                             v1.ljust(30),
+                                                             k2, v2))
 
         else:
             print("Aucun aliments sauvegardés\n")
@@ -102,7 +104,8 @@ class Ui:
                     self.show_product(**substitut)
                     if product_id and substitut_id:
                         self.title = "Sauvegarder le résultat ? "
-                        self.menu = {'1' : "Oui", '0' : "Non. Retourner au menu principal."}
+                        self.menu = {'1' : "Oui",
+                                     '0' : "Non. Retourner au menu principal."}
                     else:
                         self.title = "Aucun résultat"
                         self.menu = {'0' : "Retourner au menu principal."}
@@ -130,6 +133,7 @@ class Ui:
 
         print("A BIENTOT...")
         busboy.dismiss()
+
 
 if __name__ == '__main__':
     Ui().main()
