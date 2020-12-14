@@ -77,7 +77,7 @@ class Ui:
 
         while True:
             self.title = "Menu Principal"
-            self.menu = {'1' : "Quels aliment souhaitez vous remplacer ?",
+            self.menu = {'1' : "Choisir une catégorie d'aliments.",
                          '2' : "Retrouver mes aliments substitués.",
                          '0' : "Quitter."}
             com = self.menu_input()
