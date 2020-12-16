@@ -1,52 +1,52 @@
 # PureBeurre
 OC Projet 5
-## Qu'est-ce que c'est.
-PureBeurre est le résultat de mon projet 5 sur le parcours OpenClassRooms de développeur d'application : Python.
-C'est une application qui propose un substitut à un aliment choisit en utilisant les données de l'API OpenFoodFacts.
-## Installation et Prérequis.
-Requiert l'installation de Python 3.8, mysql-server et mysql-client version 8, et des modules listés dans le fichier requirements.txt.
-### Installer Python 3.8.
-Le lien vers le site officiel : *[Télécharger Python](https://www.python.org/downloads/)*
-### Installer MySQL.
-Le lien vers la documentation officiel : *[Installer MySQL](https://dev.mysql.com/doc/mysql-installation-excerpt/8.0/en/)*
-### Installer PureBeurre.
-Le lien vers le dépot GitHub : *[PureBeurre](https://github.com/screw-pack/PureBeurre.git)*<br><br>
-- Forker le projet : *[Forker un projet](https://guides.github.com/activities/forking/)*<br>
-- Créer un dossier pour stocker le clone de votre fork.<br>
-- Cloner : <br><br>`user@computer:~/chemin/$ git clone <votre dépot du fork>`<br><br>
-- Créer un environnement Virtuel : <br><br>`user@computer:~/chemin/$ python3 -m venv <le nom de votre environnement>`<br>
-### Installer les modules Python.
-- Activer l'environnement virtuel : <br><br>`user@computer:~/chemin/$ source <nom de l'environnement>/bin/activate`<br><br>
-- Installer les Prérequis : <br><br>`(.env) user@computer:~/chemin/$ pip install -r requirements.txt`<br>
-## Créer la base de données.
-- Pour créer la base de données il suffit de remplacer les valeurs du fichier config.ini par les votre.<br><br>
+## About.
+PureBeurre is the result of my project 5 on the OpenClassRooms path of application developer: Python.
+It's an application that suggest a substitute for a chosen food product using data from the OpenFoodFacts API.
+## Installation and requirements.
+It requires Python 3.6 or higher, mysql-server and mysql-client version 8, and modules listed in the requirements.txt file.
+### Install Python 3.
+Link to the official web site : *[Download Python](https://www.python.org/downloads/)*
+### Install MySQL.
+Link to the official documentation : *[Install MySQL](https://dev.mysql.com/doc/mysql-installation-excerpt/8.0/en/)*
+### Install PureBeurre.
+Link to the GitHub repository : *[PureBeurre](https://github.com/screw-pack/PureBeurre.git)*<br><br>
+- Fork the project : *[Fork a project](https://guides.github.com/activities/forking/)*<br>
+- Create a directory for the clone.<br>
+- Clone : <br><br>`user@computer:~/_path_/$ git clone <repository_url>`<br><br>
+- Create a virtual environment : <br><br>`user@computer:~/_path_/$ python3 -m venv <environment_name>`<br>
+### Install Python's modules.
+- Activate the virtual environment : <br><br>`user@computer:~/_path_/$ source <environment_name>/bin/activate`<br><br>
+- Install requirements : <br><br>`(.env) user@computer:~/_path_/$ pip install -r requirements.txt`<br>
+## Create database.
+- To create the database, just replace the values in the config.ini file with yours.<br><br>
 `[mysql]`<br>
 `host = localhost`<br>
-`database = <nom de la DB>`<br>
-`user = <nom utilisateur>`<br>
-`password = <mot de passe>`<br><br>
-- Ensuite, dans votre VENV executer le fichier dbcreate.py : <br><br>`(.env) user@computer:~/chemin/$ python dbcreate.py`<br>
-## L'application.
-L'interface utilisateur s'ouvre dans une console.
-Les fonctionnalités sont accessibles a travers un menu dont les choix sont numéroté.
-L'utilisateur y accède en entrant le numéro correspondant.
-### Menu principal.
-- 1. Choisir une catégorie d'aliments : Renvoi à un sous menu catégories.
-- 2. Retrouver mes aliments substitué : Affiche la liste des comparaisons sauvegardées précédemment.
-- 0. Quitter : quitter l'application.
-### Menu catégories.
-Affiche les catégories d'aliments par groupes alimentaire de 1 à 10.<br>
-0 permet à l'utilisateur de revenir au menu principal.
-### Menu aliments.
-Le système propose une sélection de 10 aliments correspondants à la catégorie sélectionnée.
-Ces aliments sont numérotés, l'utilisateur rentre le numéro associé.<br>
-0 permet à l'utilisateur de revenir au menu principal.
+`database = <your DB name>`<br>
+`user = <your user name>`<br>
+`password = <your password>`<br><br>
+- Then in VENV, execute dbcreate.py file : <br><br>`(.env) user@computer:~/_path_/$ python dbcreate.py`<br>
+## The App.
+The user interface opens in a console.
+The functionalities are accessible through a numbered menu.
+The user accesses it by entering the corresponding number.
+### Main menu.
+- 1. Choisir une catégorie d'aliments : brings to a categories sub menu.
+- 2. Retrouver mes aliments substitué : Displays the list of previously saved comparisons.
+- 0. Quitter : quit the application.
+### Categories menu.
+Displays 10 products categories ordered by food groups. <br>
+0 allows the user to return to the main menu.
+### Products menu.
+The system offers a selection of 10 products corresponding to the selected category.
+These products are numbered, the user enters the associated number. <br>
+0 allows the user to return to the main menu.
 ### Substitut.
-Le système affiche un aliment de substitution (en détail) à l'aliment sélectionné.
-Et il demande à l'utilisateur si il veut sauvegarder cette comparaison.<br>
-- 1. Oui : l'aliment et son substitut sont sauvegardés dans la base de données.<br>
-- 0. Non. Retour au menu principal : l'utilisateur revient au menu principal
-### Menu aliments substitués.
-Le système affiche les comparaisons préalablement sauvegardés.
-Les aliments sont numérotés, l'utilisateur a la possibilité d'entrer un numéro pour voir les détails de l'aliment.<br>
-0 permet à l'utilisateur de revenir au menu principal.
+The system displays a substitute food (in detail) for the selected product.
+And it asks the user if they want to save this comparison. <br>
+- 1. Oui : the products and its substitute are both saved in the database.<br>
+- 0. Non. Retour au menu principal : the user returns to the main menu.
+### Substituted food menu.
+The system displays the previously saved comparisons.
+Products are numbered, the user has the option to enter a number to see the details of the food. <br>
+0 allows the user to return to the main menu.

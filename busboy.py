@@ -108,7 +108,8 @@ class Busboy:
         keyword = self.keyword(id)
         query = "SELECT id FROM Products WHERE tags LIKE ('%{}%') \
                  AND (nutriscore IN ('a', 'b', 'c') OR additives IS NULL) \
-                 ORDER BY RAND() LIMIT 1".format(keyword)
+                 AND id <> {} \
+                 ORDER BY RAND() LIMIT 1".format(keyword, id)
         id = None
 
         try:

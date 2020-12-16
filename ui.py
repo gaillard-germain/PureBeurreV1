@@ -30,14 +30,15 @@ class Ui:
         """ Display saved substituts in a simple way """
 
         print("\n---Mes aliments substitués.---\n")
+
+        text = ' --substitut-> '.ljust(20)
+
         if unliked and liked:
             for i, k1 in enumerate(unliked.keys()):
-                v1 = unliked[k1]
+                product = '({}) {}'.format(k1, unliked[k1]).ljust(45)
                 k2 = list(liked)[i]
-                v2 = liked[k2]
-                print("({}) {} --substitut-> ({}) {}".format(k1.ljust(4),
-                                                             v1.ljust(30),
-                                                             k2, v2))
+                substitut = '({}) {}'.format(k2, liked[k2])
+                print("{} {} {}".format(product, text, substitut))
 
         else:
             print("Aucun aliments sauvegardés\n")
@@ -45,9 +46,9 @@ class Ui:
     def show_product(self, **product):
         """ Display the details of the product """
 
-        print('\n---Detail---\n')
+        print('\n{}\n'.format('Detail'.center(30, '-')))
         for key, value in product.items():
-            print("|  {} : {}".format(key.ljust(20), value))
+            print("|  {} : {}".format(key.upper().ljust(20), value))
 
     def menu_input(self):
         """ Display menu with user's entry """
@@ -101,6 +102,7 @@ class Ui:
                     product_id = com
                     substitut_id = busboy.substitut_id(product_id)
                     substitut = busboy.product_detail(substitut_id)
+                    print("Une alternative à {} :".format(self.menu[str(product_id)]))
                     self.show_product(**substitut)
                     if product_id and substitut_id:
                         self.title = "Sauvegarder le résultat ? "
