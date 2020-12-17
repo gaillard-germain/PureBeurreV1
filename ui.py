@@ -8,7 +8,6 @@
 
 from busboy import Busboy
 import os
-from collections import OrderedDict
 
 
 class Ui:
@@ -26,24 +25,7 @@ class Ui:
         else:
             _ = os.system('clear')
 
-    def show_saved(self, unliked, liked):
-        """ Display saved substituts in a simple way """
-
-        print("\n---Mes aliments substitués.---\n")
-
-        text = ' --substitut-> '.ljust(20)
-
-        if unliked and liked:
-            for i, k1 in enumerate(unliked.keys()):
-                product = '({}) {}'.format(k1, unliked[k1]).ljust(45)
-                k2 = list(liked)[i]
-                substitut = '({}) {}'.format(k2, liked[k2])
-                print("{} {} {}".format(product, text, substitut))
-
-        else:
-            print("Aucun aliments sauvegardés\n")
-
-    def show_product(self, **product):
+    def show_product(self, product):
         """ Display the details of the product """
 
         print('\n{}\n'.format('Detail'.center(30, '-')))
@@ -78,9 +60,9 @@ class Ui:
 
         while True:
             self.title = "Menu Principal"
-            self.menu = {'1' : "Choisir une catégorie d'aliments.",
-                         '2' : "Retrouver mes aliments substitués.",
-                         '0' : "Quitter."}
+            self.menu = {'1': "Choisir une catégorie d'aliments.",
+                         '2': "Retrouver mes aliments substitués.",
+                         '0': "Quitter."}
             com = self.menu_input()
 
             if not com:
@@ -93,7 +75,7 @@ class Ui:
                 com = self.menu_input()
 
                 if com:
-                    self.title ="Choisissez un produit"
+                    self.title = "Choisissez un produit"
                     self.menu = busboy.products_menu(com)
                     self.menu['0'] = "Retourner au menu principal."
                     com = self.menu_input()
@@ -102,36 +84,42 @@ class Ui:
                     product_id = com
                     substitut_id = busboy.substitut_id(product_id)
                     substitut = busboy.product_detail(substitut_id)
-                    print("Une alternative à {} :".format(self.menu[str(product_id)]))
-                    self.show_product(**substitut)
+                    print("Une alternative à {} :"
+                          .format(self.menu[str(product_id)]))
+                    self.show_product(substitut)
                     if product_id and substitut_id:
                         self.title = "Sauvegarder le résultat ? "
-                        self.menu = {'1' : "Oui",
-                                     '0' : "Non. Retourner au menu principal."}
+                        self.menu = {'1': "Oui",
+                                     '0': "Non. Retourner au menu principal."}
                     else:
                         self.title = "Aucun résultat"
-                        self.menu = {'0' : "Retourner au menu principal."}
+                        self.menu = {'0': "Retourner au menu principal."}
                     com = self.menu_input()
 
                 if com == 1:
                     busboy.save((product_id, substitut_id))
                     com = None
 
-
             elif com == 2:
-                unliked, liked = busboy.substituts_saved()
-                sub = dict(unliked)
-                sub.update(liked)
-                self.title = "Entrez le n° du produit pour voir le detail."
-                self.menu = sub
+                sub = busboy.substituts_saved()
+                menu_sub = {}
+                for key, value in sub.items():
+                    menu_sub[key] = "{} de {}   --substitut->   {} de {}" \
+                                    .format(value[1], value[2],
+                                            value[4], value[5])
+                self.title = "Mes aliments substitués"
+                self.menu = menu_sub
                 self.menu['0'] = "Retourner au menu principal."
 
+                com = self.menu_input()
+
                 while com:
-                    self.show_saved(unliked, liked)
+                    self.show_product(busboy.product_detail(sub[str(com)][0]))
+                    print("\n\nPeu être substitué par:\n")
+                    self.show_product(busboy.product_detail(sub[str(com)][3]))
+                    com = input("\nAppuyer sur Entrée pour continuer...")
+                    self.clear_console()
                     com = self.menu_input()
-                    if com:
-                        choosen = busboy.product_detail(com)
-                        self.show_product(**choosen)
 
         print("A BIENTOT...")
         busboy.dismiss()

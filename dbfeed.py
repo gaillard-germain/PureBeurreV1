@@ -7,7 +7,7 @@
 # License: GNU GPL
 
 
-import requests, json
+import requests
 from dbtools import insert_products
 
 
@@ -15,16 +15,16 @@ def format_value(dict, key):
     """ Checks if the field exist in the json from openfoodfacts API
         and return a formated value"""
 
-    groups = {'Milk and dairy products' : 1,
-            'Fish Meat Eggs' : 2,
-            'Cereals and potatoes' : 3,
-            'Fruits and vegetables' : 4,
-            'Fat and sauces' : 5,
-            'Sugary snacks' : 6,
-            'Beverages' : 7,
-            'Salty snacks' : 8,
-            'Composite foods' : 9,
-            'unknown' : 10,}
+    groups = {'Milk and dairy products': 1,
+              'Fish Meat Eggs': 2,
+              'Cereals and potatoes': 3,
+              'Fruits and vegetables': 4,
+              'Fat and sauces': 5,
+              'Sugary snacks': 6,
+              'Beverages': 7,
+              'Salty snacks': 8,
+              'Composite foods': 9,
+              'unknown': 10}
     value = None
 
     try:
@@ -43,6 +43,7 @@ def format_value(dict, key):
         print("product {} doesn't have {} field".format(dict['code'], error))
 
     return value
+
 
 def feed_database():
     """ Insert datas from openfoodfacts API into database """

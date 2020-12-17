@@ -26,6 +26,7 @@ def read_db_config(filename='config.ini', section='mysql'):
 
     return db
 
+
 def insert_products(products):
     """ Insert products rows into Products table """
 

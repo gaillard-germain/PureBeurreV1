@@ -48,5 +48,5 @@ And it asks the user if they want to save this comparison. <br>
 - 0. Non. Retour au menu principal : the user returns to the main menu.
 ### Substituted food menu.
 The system displays the previously saved comparisons.
-Products are numbered, the user has the option to enter a number to see the details of the food. <br>
+These comparisons are numbered, the user has the option to enter a number to see the details of the products and its substitut.<br>
 0 allows the user to return to the main menu.

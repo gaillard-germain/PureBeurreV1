@@ -9,7 +9,6 @@
 
 from mysql.connector import MySQLConnection, Error, errorcode
 from dbtools import read_db_config
-from collections import OrderedDict
 
 
 class Busboy:
@@ -50,7 +49,7 @@ class Busboy:
         """ Returns a dict of alimentary groups with their id """
 
         query = 'SELECT * FROM PnnsGroups ORDER BY id'
-        menu = OrderedDict()
+        menu = {}
 
         try:
             self.cursor.execute(query)
@@ -65,7 +64,7 @@ class Busboy:
         return menu
 
     def products_menu(self, id):
-        """ Returns a dict of a random top ten 'bads' products with their id """
+        """ Returns a dict of random top ten 'bads' products with their id """
 
         query = "SELECT id, name, brand \
                  FROM Products WHERE pnns_group_id = {} \
@@ -103,7 +102,7 @@ class Busboy:
         return keyword
 
     def substitut_id(self, id):
-        """ Returns a random 'good' product's id which tags matched keyword """
+        """ Returns random 'good' product's id which tags matched keyword """
 
         keyword = self.keyword(id)
         query = "SELECT id FROM Products WHERE tags LIKE ('%{}%') \
@@ -166,26 +165,28 @@ class Busboy:
             print(error)
 
     def substituts_saved(self):
-        """ Returns a dict of unliked products and a dict of liked products """
+        """ Returns a dict of comparisons :
+            {id : [unliked_id, unliked_name, unliked_brand,
+            liked_id, liked_name, liked_brand]...} """
 
-        query = "SELECT unliked_id, Prod1.name, Prod1.brand,\
+        query = "SELECT Substituts.id, unliked_id, Prod1.name, Prod1.brand,\
                  liked_id, Prod2.name, Prod2.brand \
                  FROM Substituts INNER JOIN Products AS Prod1 \
                  ON Substituts.unliked_id = Prod1.id \
                  INNER JOIN Products AS Prod2 \
                  ON Substituts.liked_id = Prod2.id"
-        unliked = OrderedDict()
-        liked = OrderedDict()
+        sub = {}
 
         try:
             self.cursor.execute(query)
             rows = self.cursor.fetchall()
 
             for row in rows:
-                unliked[str(row[0])] = "{} de {}".format(row[1], row[2])
-                liked[str(row[3])] = "{} de {}".format(row[4], row[5])
+                row = list(row)
+                id = row.pop(0)
+                sub[str(id)] = row
 
         except Error as error:
             print(error)
 
-        return unliked, liked
+        return sub
