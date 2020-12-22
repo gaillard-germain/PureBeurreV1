@@ -26,7 +26,7 @@ def create_database(tables, query):
     cursor = conx.cursor()
 
     try:
-        cursor.execute("DROP DATABASE {}".format(db_name))
+        cursor.execute("DROP DATABASE IF EXISTS {}".format(db_name))
 
         try:
             cursor.execute("CREATE DATABASE {} \
@@ -39,14 +39,8 @@ def create_database(tables, query):
         conx.database = db_name
 
     except Error as error:
-        print("Database {} does not exists.".format(db_name))
-        if error.errno == errorcode.ER_BAD_DB_ERROR:
-            create_database(cursor, db_name)
-            print("Database {} created successfully.".format(db_name))
-            conx.database = db_name
-        else:
-            print(error)
-            exit(1)
+        print(error)
+        exit(1)
 
     for table_name in tables:
         table_description = tables[table_name]
