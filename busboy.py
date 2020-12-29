@@ -8,35 +8,13 @@
 
 
 from mysql.connector import MySQLConnection, Error, errorcode
-from dbtools import read_db_config
+from dbtools import Dbtools
 
 
 class Busboy:
     def __init__(self):
-        self.conx = None
-        self.cursor = None
-        self.connect()
-
-    def connect(self):
-        """ Connect to MySQL database """
-
-        db_config = read_db_config()
-
-        try:
-            print('Connecting to {} database...'.format(db_config['database']))
-            self.conx = MySQLConnection(**db_config)
-
-            if self.conx.is_connected():
-                print('Connection established.')
-            else:
-                print('Connection failed.')
-
-        except Error as error:
-            print(error)
-
-        finally:
-            if self.conx is not None and self.conx.is_connected():
-                self.cursor = self.conx.cursor()
+        self.conx = Dbtools.connect()
+        self.cursor = self.conx.cursor()
 
     def dismiss(self):
         """ Close connexion to MySQL database """

@@ -9,47 +9,42 @@
 from configparser import ConfigParser
 from mysql.connector import MySQLConnection, Error
 
+class Dbtools:
+    @staticmethod
+    def read_db_config(filename='config.ini', section='mysql'):
+        """ Read database configuration file and return a dictionary object"""
 
-def read_db_config(filename='config.ini', section='mysql'):
-    """ Read database configuration file and return a dictionary object"""
+        parser = ConfigParser()
+        parser.read(filename)
 
-    parser = ConfigParser()
-    parser.read(filename)
+        db = {}
+        if parser.has_section(section):
+            items = parser.items(section)
+            for item in items:
+                db[item[0]] = item[1]
+        else:
+            raise Exception('{} not found in {} file'.format(section, filename))
 
-    db = {}
-    if parser.has_section(section):
-        items = parser.items(section)
-        for item in items:
-            db[item[0]] = item[1]
-    else:
-        raise Exception('{} not found in {} file'.format(section, filename))
+        return db
 
-    return db
+    @classmethod
+    def connect(cls):
+        """ Connect to MySQL database """
 
+        db_config = cls.read_db_config()
 
-def insert_products(products):
-    """ Insert products rows into Products table """
+        try:
+            print('Connecting to {} database...'.format(db_config['database']))
+            conx = MySQLConnection(**db_config)
 
-    query = 'INSERT IGNORE INTO Products(name, brand, tags, \
-             pnns_group_id, ingredients, additives, allergens, nutriscore, \
-             labels, stores, link, compared_to) \
-             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
+            if conx.is_connected():
+                print('Connection established.')
+            else:
+                print('Connection failed.')
 
-    db_config = read_db_config()
+        except Error as error:
+            print(error)
 
-    try:
-        print('Connecting to {} database...'.format(db_config['database']))
-        conx = MySQLConnection(**db_config)
-        cursor = conx.cursor()
-
-        print('Inserting datas...')
-
-        cursor.executemany(query, products)
-        conx.commit()
-        cursor.close()
-        conx.close()
-
-        print('Connection closed.')
-
-    except Error as error:
-        print(error)
+        finally:
+            if conx is not None and conx.is_connected():
+                return conx
