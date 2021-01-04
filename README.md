@@ -4,7 +4,7 @@ OC Projet 5
 PureBeurre is the result of my project 5 on the OpenClassRooms path of application developer: Python.
 It's an application that suggest a substitute for a chosen food product using data from the OpenFoodFacts API.
 ## Installation and requirements.
-It requires Python 3.6 or higher, mysql-server and mysql-client version 8, and modules listed in the requirements.txt file.
+It requires Python 3, mysql-server and mysql-client version 8, and modules listed in the requirements.txt file.
 ### Install Python 3.
 Link to the official web site : *[Download Python](https://www.python.org/downloads/)*
 ### Install MySQL.
