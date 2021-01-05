@@ -9,6 +9,7 @@
 from configparser import ConfigParser
 from mysql.connector import MySQLConnection, Error
 
+
 class Dbtools:
     @staticmethod
     def read_db_config(filename='config.ini', section='mysql'):
@@ -23,7 +24,7 @@ class Dbtools:
             for item in items:
                 db[item[0]] = item[1]
         else:
-            raise Exception('{} not found in {} file'.format(section, filename))
+            raise Exception('{} not found in {}'.format(section, filename))
 
         return db
 

@@ -6,10 +6,11 @@
 # Version: 0.1
 # License: GNU GPL
 
-from mysql.connector import MySQLConnection, Error, errorcode
+from mysql.connector import MySQLConnection, Error
 from dbtools import Dbtools
 from dbfeed import Dbfeed
 from tables import tables, query
+
 
 class Dbcreate:
     def __init__(self):
@@ -75,8 +76,8 @@ class Dbcreate:
         """ Insert products rows into Products table """
 
         query = 'INSERT IGNORE INTO Products(name, brand, tags, \
-                 pnns_group_id, ingredients, additives, allergens, nutriscore, \
-                 labels, stores, link, compared_to) \
+                 pnns_group_id, ingredients, additives, allergens, \
+                 nutriscore, labels, stores, link, compared_to) \
                  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 
         try:

@@ -7,7 +7,7 @@
 # License: GNU GPL
 
 
-from mysql.connector import MySQLConnection, Error, errorcode
+from mysql.connector import Error, errorcode
 from dbtools import Dbtools
 
 

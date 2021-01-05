@@ -6,8 +6,8 @@
 # Version: 0.1
 # License: GNU GPL
 
-
 import requests
+
 
 class Dbfeed:
     @staticmethod
@@ -40,7 +40,8 @@ class Dbfeed:
                 value = ', '.join(value)
 
         except KeyError as error:
-            print("product {} doesn't have {} field".format(dict['code'], error))
+            print("product {} doesn't have {} field".format(dict['code'],
+                                                            error))
 
         return value
 
