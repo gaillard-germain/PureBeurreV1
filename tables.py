@@ -19,7 +19,7 @@ tables['Products'] = (
     "  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,"
     "  name varchar(100) NOT NULL UNIQUE,"
     "  brand varchar(100) DEFAULT NULL,"
-    "  tags text NOT NULL,"
+    "  tags varchar(200) NOT NULL,"
     "  pnns_group_id smallint(5) unsigned NOT NULL,"
     "  ingredients text DEFAULT NULL,"
     "  additives text DEFAULT NULL,"
@@ -30,6 +30,7 @@ tables['Products'] = (
     "  link varchar(100) DEFAULT NULL UNIQUE,"
     "  compared_to varchar(50) DEFAULT NULL,"
     "  PRIMARY KEY (id),"
+    "  INDEX (tags),"
     "  CONSTRAINT fk_pnns_group_id FOREIGN KEY (pnns_group_id)"
     "    REFERENCES PnnsGroups (id)"
     ") ENGINE = InnoDB")
