@@ -49,6 +49,8 @@ class Dbcreate:
             self.conx = conx
 
     def create_tables(self):
+        """ Creates database's tables """
+
         for table_name in self.tables:
             table_description = self.tables[table_name]
             try:
@@ -89,6 +91,8 @@ class Dbcreate:
             print(error)
 
     def create(self):
+        """ Creates the database and fill it with API's datas """
+        
         self.create_database()
         self.create_tables()
         products = Dbfeed.feed()
