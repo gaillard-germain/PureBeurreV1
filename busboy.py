@@ -26,7 +26,7 @@ class Busboy:
     def groups_menu(self):
         """ Returns a dict of alimentary groups with their id """
 
-        query = 'SELECT * FROM PnnsGroups ORDER BY id'
+        query = 'SELECT * FROM Categories ORDER BY id'
         menu = {}
 
         try:
@@ -45,7 +45,7 @@ class Busboy:
         """ Returns a dict of random top ten 'bads' products with their id """
 
         query = "SELECT id, name, brand \
-                 FROM Products WHERE pnns_group_id = {} \
+                 FROM Products WHERE categories_id = {} \
                  AND (nutriscore IN ('d', 'e') \
                  OR nutriscore IS NULL) \
                  ORDER BY RAND() LIMIT 10".format(id)
@@ -132,7 +132,7 @@ class Busboy:
     def save(self, ids):
         """ Saves comparison in database (product's id) """
 
-        query = "INSERT INTO Substituts(unliked_id, liked_id) \
+        query = "INSERT INTO Favorites(unliked_id, liked_id) \
                  VALUES(%s, %s)"
 
         try:
@@ -147,12 +147,12 @@ class Busboy:
             {id : [unliked_id, unliked_name, unliked_brand,
             liked_id, liked_name, liked_brand]...} """
 
-        query = "SELECT Substituts.id, unliked_id, Prod1.name, Prod1.brand,\
+        query = "SELECT Favorites.id, unliked_id, Prod1.name, Prod1.brand,\
                  liked_id, Prod2.name, Prod2.brand \
-                 FROM Substituts INNER JOIN Products AS Prod1 \
-                 ON Substituts.unliked_id = Prod1.id \
+                 FROM Favorites INNER JOIN Products AS Prod1 \
+                 ON Favorites.unliked_id = Prod1.id \
                  INNER JOIN Products AS Prod2 \
-                 ON Substituts.liked_id = Prod2.id"
+                 ON Favorites.liked_id = Prod2.id"
         sub = {}
 
         try:

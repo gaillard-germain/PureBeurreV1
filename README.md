@@ -46,7 +46,7 @@ The system displays a substitute food (in detail) for the selected product.
 And it asks the user if they want to save this comparison. <br>
 - 1. Oui : the products and its substitute are both saved in the database.<br>
 - 0. Non. Retour au menu principal : the user returns to the main menu.
-### Substituted food menu.
+### Favorites menu.
 The system displays the previously saved comparisons.
 These comparisons are numbered, the user has the option to enter a number to see the details of the products and its substitut.<br>
 0 allows the user to return to the main menu.

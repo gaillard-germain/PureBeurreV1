@@ -7,8 +7,8 @@
 # License: GNU GPL
 
 tables = {}
-tables['PnnsGroups'] = (
-    "CREATE TABLE PnnsGroups("
+tables['Categories'] = (
+    "CREATE TABLE Categories("
     "  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,"
     "  name varchar(50) NOT NULL UNIQUE,"
     "  PRIMARY KEY (id)"
@@ -20,7 +20,7 @@ tables['Products'] = (
     "  name varchar(100) NOT NULL UNIQUE,"
     "  brand varchar(100) DEFAULT NULL,"
     "  tags varchar(200) NOT NULL,"
-    "  pnns_group_id smallint(5) unsigned NOT NULL,"
+    "  categories_id smallint(5) unsigned NOT NULL,"
     "  ingredients text DEFAULT NULL,"
     "  additives text DEFAULT NULL,"
     "  allergens text DEFAULT NULL,"
@@ -31,12 +31,12 @@ tables['Products'] = (
     "  compared_to varchar(50) DEFAULT NULL,"
     "  PRIMARY KEY (id),"
     "  INDEX (tags),"
-    "  CONSTRAINT fk_pnns_group_id FOREIGN KEY (pnns_group_id)"
-    "    REFERENCES PnnsGroups (id)"
+    "  CONSTRAINT fk_categories_id FOREIGN KEY (categories_id)"
+    "    REFERENCES Categories (id)"
     ") ENGINE = InnoDB")
 
-tables['Substituts'] = (
-    "CREATE TABLE Substituts ("
+tables['Favorites'] = (
+    "CREATE TABLE Favorites ("
     "  id smallint(5) unsigned NOT NULL AUTO_INCREMENT,"
     "  unliked_id smallint(5) unsigned NOT NULL,"
     "  liked_id smallint(5) unsigned NOT NULL,"
@@ -48,7 +48,7 @@ tables['Substituts'] = (
     ") ENGINE = InnoDB")
 
 query = (
-    "INSERT INTO PnnsGroups VALUES (1, 'Lait et produits laitiers'),"
+    "INSERT INTO Categories VALUES (1, 'Lait et produits laitiers'),"
     "(2, 'Viandes Poissons Oeufs'), (3, 'Féculents'),"
     "(4, 'Fruits et légumes'), (5, 'Corps gras'),"
     "(6, 'Produits sucrés'), (7, 'Boissons'),"

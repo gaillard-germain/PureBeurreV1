@@ -62,7 +62,7 @@ class Dbcreate:
                 print("OK")
 
         try:
-            print("Filling table PnnsGroups: ")
+            print("Filling table Categories: ")
             self.cursor.execute(self.query)
             self.conx.commit()
 
@@ -76,7 +76,7 @@ class Dbcreate:
         """ Insert products rows into Products table """
 
         query = 'INSERT IGNORE INTO Products(name, brand, tags, \
-                 pnns_group_id, ingredients, additives, allergens, \
+                 categories_id, ingredients, additives, allergens, \
                  nutriscore, labels, stores, link, compared_to) \
                  VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)'
 
