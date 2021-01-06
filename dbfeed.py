@@ -42,6 +42,7 @@ class Dbfeed:
         except KeyError as error:
             print("product {} doesn't have {} field".format(dict['code'],
                                                             error))
+            print("set it to NULL")
 
         return value
 
